@@ -20,6 +20,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.8.1
+  
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,18 +31,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  flutter_localizations:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  cloud_firestore: ^5.6.12
+
+  # Firebase
   firebase_core: ^3.15.2
+  cloud_firestore: ^5.6.12
+  firebase_auth: ^5.3.0
+  google_sign_in: ^6.2.1 
+
+  # Calendar & formatting
+  table_calendar: ^3.0.9
+  intl: ^0.20.2
+
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_auth: ^5.3.0
-  google_sign_in: ^6.2.1
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -56,7 +69,37 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - assets/bottom/bell_e.png
+    - assets/bottom/bell_f.png
+    - assets/bottom/home.png
+    - assets/bottom/plus.png
+    - assets/bottom/profile_e.png
+    - assets/bottom/profile_f.png
+
     - assets/images/alarm.png
+    - assets/images/kakaotalk_logo.png
+    - assets/images/google_logo.png
+    - assets/images/apple_logo.png
+    - assets/images/iphone_login.png
+
+    - assets/myprofile/account.png
+    - assets/myprofile/alarm1.png
+    - assets/myprofile/alarm2.png
+    - assets/myprofile/alarm3.png
+
+    - assets/noti/1.png
+    - assets/noti/2.png
+
+    - assets/alarm.png
+    - assets/cheerup.png
+    - assets/nice.png
+    - assets/plus.png
+    - assets/qwer.png
+    - assets/screen.png
+    - assets/tri.png
+
+
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
