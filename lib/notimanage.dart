@@ -90,7 +90,6 @@ class Notimanage extends StatelessWidget {
               )
               .toList();
 
-          // repeatCode별 그룹핑
           final Map<String, List<AssignmentModel>> grouped = {
             for (final code in kRepeatOrder) code: <AssignmentModel>[],
           };
@@ -103,7 +102,6 @@ class Notimanage extends StatelessWidget {
             return const Center(child: Text('설정된 반복 알림이 없습니다.'));
           }
 
-          // 섹션 UI 생성
           final List<Widget> sections = [];
           for (final code in kRepeatOrder) {
             final list = grouped[code]!;
@@ -111,15 +109,12 @@ class Notimanage extends StatelessWidget {
 
             sections.add(
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: RoutineHeader(label: kRepeatLabelByCode[code]!),
-              ),
-            );
-
-            sections.add(
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
-                child: _SectionGrid(items: list),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+                child: CollapsibleSection(
+                  key: ValueKey(code),
+                  label: kRepeatLabelByCode[code]!,
+                  items: list,
+                ),
               ),
             );
           }
@@ -149,8 +144,8 @@ class _SectionGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const spacing = 12.0; // 카드 간격
-    const columns = 2; // 2열
+    const spacing = 12.0;
+    const columns = 2;
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxW = constraints.maxWidth;
@@ -265,6 +260,78 @@ class RoutineCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CollapsibleSection extends StatefulWidget {
+  const CollapsibleSection({
+    super.key,
+    required this.label,
+    required this.items,
+  });
+
+  final String label;
+  final List<AssignmentModel> items;
+
+  @override
+  State<CollapsibleSection> createState() => _CollapsibleSectionState();
+}
+
+class _CollapsibleSectionState extends State<CollapsibleSection>
+    with SingleTickerProviderStateMixin {
+  bool _expanded = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () => setState(() => _expanded = !_expanded),
+          style: TextButton.styleFrom(
+            overlayColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: EdgeInsets.zero,
+            minimumSize: Size.zero,
+          ),
+          child: Row(
+            children: [
+              Image.asset('assets/tri.png', width: 14, height: 14),
+              const SizedBox(width: 7),
+              Container(
+                height: 21,
+                width: 48,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                decoration: const BoxDecoration(
+                  color: Color(0xffFF7638),
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Center(
+                  child: FittedBox(
+                    child: Text(
+                      widget.label,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        _expanded
+            ? Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: _SectionGrid(items: widget.items),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 }

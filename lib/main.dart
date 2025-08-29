@@ -4,6 +4,7 @@ import 'mypage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'login.dart';
 import 'dday_list.dart';
@@ -21,20 +22,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeShell(),
-      // debugShowCheckedModeBanner: false,
-      // locale: const Locale('ko', 'KR'),
-      // supportedLocales: const [Locale('ko', 'KR'), Locale('en', 'US')],
-      // localizationsDelegates: const [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
-      // home: const HomeScreen(),
-      // routes: {
-      //   '/login': (_) => const LoginScreen(),
-      //   '/home': (_) => const HomeShell(),
-      // },
+      locale: const Locale('ko', 'KR'),
+      supportedLocales: const [Locale('ko', 'KR'), Locale('en', 'US')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: const HomeScreen(),
+      routes: {
+        '/login': (_) => const LoginScreen(),
+        '/home': (_) => const HomeShell(),
+      },
     );
   }
 }
@@ -48,23 +47,55 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _index = 1; // 0: LeftPage, 1: CalendarPage, 2: MyPage
-
   final _calendarKey = GlobalKey<CalendarPageState>();
+
+  String _providerLabel(String? id) {
+    switch (id) {
+      case 'google.com':
+        return 'Google';
+      case 'apple.com':
+        return 'Apple';
+      case 'password':
+        return 'Email';
+      default:
+        return id ?? 'unknown';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final useNotch = _index == 1;
+
+    // ✅ FirebaseAuth 현재 사용자 정보 읽기
+    final u = FirebaseAuth.instance.currentUser;
+
+    final String name = (u?.displayName != null && u!.displayName!.isNotEmpty)
+        ? u.displayName!
+        : ((u?.providerData.isNotEmpty ?? false) &&
+              u!.providerData.first.displayName != null &&
+              u.providerData.first.displayName!.isNotEmpty)
+        ? u.providerData.first.displayName!
+        : (u?.email?.split('@').first ?? '이름 없음');
+
+    final String email = u?.email ?? '';
+
+    final String account = _providerLabel(
+      (u?.providerData.isNotEmpty ?? false)
+          ? u!.providerData.first.providerId
+          : 'unknown',
+    );
+
     return Scaffold(
       extendBody: true,
       body: IndexedStack(
         index: _index,
         children: [
-          DdayListPage(), // LeftPage
+          const DdayListPage(),
           CalendarPage(key: _calendarKey),
-          MyPage(name: '이정민'),
+          // ✅ 프로필 탭에 로그인 사용자 정보 전달
+          MyPage(name: name, email: email, account: account),
         ],
       ),
-
       floatingActionButton: useNotch
           ? FloatingActionButton(
               onPressed: () async {
@@ -87,7 +118,7 @@ class _HomeShellState extends State<HomeShell> {
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
         ),
@@ -109,9 +140,9 @@ class _HomeShellState extends State<HomeShell> {
                   ),
                 ),
                 useNotch
-                    ? SizedBox(width: 50)
+                    ? const SizedBox(width: 50)
                     : Padding(
-                        padding: EdgeInsets.only(right: 17, left: 17),
+                        padding: const EdgeInsets.only(right: 17, left: 17),
                         child: GestureDetector(
                           onTap: () => setState(() => _index = 1),
                           child: Image.asset(

@@ -146,14 +146,6 @@ class DoneListPageState extends State<DoneListPage> {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '되돌리기',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
                             SizedBox(width: 8),
                             Icon(Icons.refresh, color: Colors.white, size: 28),
                           ],

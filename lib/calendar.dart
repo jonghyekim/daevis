@@ -5,6 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'assignment.dart';
+import 'done_list.dart';
 
 class TaskItem {
   final String id;
@@ -329,7 +330,14 @@ class CalendarPageState extends State<CalendarPage> {
                               ),
                               const Spacer(),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DoneListPage(),
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   '완료된 항목 보기',
                                   style: TextStyle(color: Color(0xff676767)),

@@ -1,13 +1,21 @@
 import 'myprofile.dart';
+import 'new.dart';
 import 'notimanage.dart';
 import 'notisetting.dart';
 import 'package:flutter/material.dart';
 import 'done_list.dart';
 
 class MyPage extends StatelessWidget {
-  const MyPage({super.key, required this.name});
+  const MyPage({
+    super.key,
+    required this.name,
+    required this.account,
+    required this.email,
+  });
 
   final String name;
+  final String account;
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +54,9 @@ class MyPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MyProfile(
-                            name: '이정민',
-                            account: '카카오톡',
-                            email: 'sodahuk@handong.ac.kr',
+                            name: name,
+                            account: account,
+                            email: email,
                           ),
                         ),
                       );
