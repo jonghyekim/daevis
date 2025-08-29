@@ -66,7 +66,7 @@ class _HomeShellState extends State<HomeShell> {
   Widget build(BuildContext context) {
     final useNotch = _index == 1;
 
-    // ✅ FirebaseAuth 현재 사용자 정보 읽기
+    // FirebaseAuth 현재 사용자 정보 읽기
     final u = FirebaseAuth.instance.currentUser;
 
     final String name = (u?.displayName != null && u!.displayName!.isNotEmpty)
@@ -92,7 +92,7 @@ class _HomeShellState extends State<HomeShell> {
         children: [
           const DdayListPage(),
           CalendarPage(key: _calendarKey),
-          // ✅ 프로필 탭에 로그인 사용자 정보 전달
+          // 프로필 탭에 로그인 사용자 정보 전달
           MyPage(name: name, email: email, account: account),
         ],
       ),
